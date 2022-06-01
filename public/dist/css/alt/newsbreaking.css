@@ -1,0 +1,27 @@
+
+
+.news {
+    width: 170px;
+    border-right: 8px solid white;
+}
+
+.news-scroll a {
+    text-decoration: none;
+    font-size: 18px
+}
+
+.last{
+    font-size: 1rem;
+}
+
+.dot {
+    height: 6px;
+    width: 6px;
+    margin-left: 3px;
+    margin-right: 3px;
+    margin-top: 2px !important;
+    background-color: rgb(207, 23, 23);
+    border-radius: 50%;
+    display: inline-block
+}
+
