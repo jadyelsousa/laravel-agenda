@@ -32,17 +32,19 @@
 
 
             <div class="login-logo">
-                <a href="{{ route('login') }}"><b>Agenda</b></a>
-                </div>
+                <a href="{{ route('login') }}"><b>personal </b>contacts</a>
+            </div>
 
             <div class="card">
                 <div class="card-body login-card-body">
                     <p class="login-box-msg">Faça login para entrar no sistema</p>
+                    <x-auth-validation-errors class="mb-4" :errors="$errors" />
+
                     <form id="quickForm" method="POST" action="{{ route('login') }}">
                         @csrf
                         <div class="input-group mb-3">
-                            <input type="email" class="form-control" placeholder="Email" value="{{old('email')}}" required
-                                autofocus>
+                            <input type="email" class="form-control" placeholder="Email" name="email" value="{{ old('email') }}"
+                                required autofocus>
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                     <span class="fas fa-envelope"></span>
@@ -65,7 +67,7 @@
                                 <button type="submit" class="btn btn-primary btn-block" onclick="event.preventDefault();
                                 this.disabled=true;
                                 this.value='Enviando';
-                                this.closest('form').submit();" >Entrar</button>
+                                this.closest('form').submit();">Entrar</button>
                             </div>
 
                         </div>
