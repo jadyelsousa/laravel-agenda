@@ -38,6 +38,7 @@
             <div class="card">
                 <div class="card-body login-card-body">
                     <p class="login-box-msg">Faça login para entrar no sistema</p>
+                    <x-auth-session-status class="mb-4" :status="session('status')" />
                     <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
                     <form id="quickForm" method="POST" action="{{ route('login') }}">
@@ -74,7 +75,7 @@
                     </form>
 
                     <p class="mb-1">
-                        <a href="forgot-password.html">Esqueceu a senha?</a>
+                        <a href="{{ route('password.request') }}">Esqueceu a senha?</a>
                     </p>
                     <p class="mb-0">
                         <a href="{{ route('register') }}" class="text-center">Novo no sistema?</a>

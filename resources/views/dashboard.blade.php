@@ -59,9 +59,10 @@
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <div class="breadcrumb float-sm-right">
-                            <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modal-lg"><i class="fa fa-phone-plus"></i> Novo Contato</button>
+                            <button type="button" class="btn btn-primary btn-block" data-toggle="modal"
+                                data-target="#modal-lg"><i class="fa fa-phone-plus"></i> Novo Contato</button>
                         </div>
-                      </div><!-- /.col -->
+                    </div><!-- /.col -->
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
         </div>
@@ -141,11 +142,13 @@
                                                     solution to this problem...
                                                 </td>
                                                 <td class="mailbox-attachment"></td>
-                                                <td class="mailbox-date"><button type="button" class="btn btn-tool" title="Contacts" data-widget="chat-pane-toggle">
-                                                    <i class="fas fa-comments"></i>
-                                                    </button><button type="button" class="btn btn-tool" title="Contacts" data-widget="chat-pane-toggle">
+                                                <td class="mailbox-date"><button type="button" class="btn btn-tool"
+                                                        title="Contacts" data-widget="chat-pane-toggle">
                                                         <i class="fas fa-comments"></i>
-                                                        </button></td>
+                                                    </button><button type="button" class="btn btn-tool"
+                                                        title="Contacts" data-widget="chat-pane-toggle">
+                                                        <i class="fas fa-comments"></i>
+                                                    </button></td>
                                             </tr>
                                             <tr>
                                                 <td>
@@ -224,9 +227,11 @@
                                                 </td>
                                                 <td class="mailbox-star"><a href="#"><i
                                                             class="fas fa-star-o text-warning"></i></a></td>
-                                                <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a>
+                                                <td class="mailbox-name"><a href="read-mail.html">Alexander
+                                                        Pierce</a>
                                                 </td>
-                                                <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a
+                                                <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
+                                                    a
                                                     solution to this problem...
                                                 </td>
                                                 <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
@@ -438,87 +443,127 @@
         <!-- /.content -->
         <div class="modal fade" id="modal-lg">
             <div class="modal-dialog modal-lg">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h4 class="modal-title">Novo Contato</h4>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-row">
-                          <div class="form-group col-md-6">
-                            <label for="nome">Nome</label>
-                            <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome">
-                          </div>
-                          <div class="form-group col-md-6">
-                            <label for="sobrenome">Sobrenome</label>
-                            <input type="text" class="form-control" id="sobrenome" name="sobrenome" placeholder="Sobrenome">
-                          </div>
-                        </div>
-
-                        <label >Telefone</label>
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <input type="text" class="form-control" name="telefone[]" placeholder="Telefone">
-                              </div>
-                              <div class="form-group col-md-6">
-                                <select class="form-control" name="tipo[]">
-                                    <option selected >Celular</option>
-                                    <option>Comercial</option>
-                                    <option>Casa</option>
-                                    <option>Principal</option>
-                                    <option>Outros</option>
-                                    </select>
-                              </div>
-                              <div class="form-group col-md-2 tnp-buttons">
-                                <button type='button' class='mb-xs mr-xs btn btn-primary addmorephone'><i class='fa fa-plus'></i></button>
-
-                            </div>
-                        </div>
-                        <div id="phoneappendhere">
-                        </div>
-                        <label>Endereço</label>
-                        <div class="adress-group">
-                        <div class="form-row">
-                            <div class="form-group col-md-2">
-                                <input type="text" class="form-control" value="{{old('cep')}}" name="cep[]" placeholder="CEP">
-                              </div>
-                          <div class="form-group col-md-6">
-                            <input type="text" class="form-control" value="{{old('cidade')}}" name="cidade[]" placeholder="Cidade">
-                          </div>
-                          <div class="form-group col-md-2">
-                            <input type="text" class="form-control" value="{{old('estado')}}" name="estado[]" placeholder="Estado">
-                          </div>
-                        </div>
-                        <div class="form-row">
-                        <div class="form-group col-md-10">
-                            <input type="text" class="form-control" placeholder="Endereço ">
-                          </div>
-                          <div class="form-group col-md-2 tna-buttons">
-                            <button type='button' class='mb-xs mr-xs btn btn-primary addmoreadress'><i class='fa fa-plus'></i></button>
-
-                        </div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Novo Contato</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                        </div>
-                        <div id="adressappendhere">
-                        </div>
+                    <div class="modal-body">
+                        <form id="cad-form" method="POST" action="{{route('contact.store')}}">
+                            @csrf
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="nome">Nome</label>
+                                    <input type="text" class="form-control" id="nome" name="nome" required='true' placeholder="Nome">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="sobrenome">Sobrenome</label>
+                                    <input type="text" class="form-control" id="sobrenome" required='true' name="sobrenome"
+                                        placeholder="Sobrenome">
+                                </div>
+                            </div>
+
+                            <label>Telefone</label>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <input type="text" class="form-control telefone-mask" name="telefone[]" id="telefone" placeholder="(__) ____-____">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <select class="form-control" name="tipo[]">
+                                        <option selected >Celular</option>
+                                        <option>Comercial</option>
+                                        <option>Casa</option>
+                                        <option>Principal</option>
+                                        <option>Outros</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2 tnp-buttons">
+                                    <button type='button' class='mb-xs mr-xs btn btn-primary addmorephone'><i
+                                            class='fa fa-plus'></i></button>
+
+                                </div>
+                            </div>
+                            <div id="phoneappendhere">
+                            </div>
+                            <label>Email</label>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <input type="text" class="form-control" name="email[]" placeholder="Email">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <select class="form-control" name="tipo[]">
+                                        <option selected>Celular</option>
+                                        <option>Comercial</option>
+                                        <option>Casa</option>
+                                        <option>Principal</option>
+                                        <option>Outros</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2 tnm-buttons">
+                                    <button type='button' class='mb-xs mr-xs btn btn-primary addmoremail'><i
+                                            class='fa fa-plus'></i></button>
+
+                                </div>
+                            </div>
+                            <div id="mailappendhere">
+                            </div>
+                            <label>Endereço</label>
+                            <span id='mensagem'
+                                            style='color: red; font-size: 13px;'></span>
+                            <div class="adress-group">
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <input type="text" class="form-control cep-mask" name="cep" onblur="pesquisacep(this.value);"  id="cep" value="{{ old('cep') }}"
+                                            name="cep[]" placeholder="CEP">
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <input type="text" class="form-control" name="cidade" id="cidade" value="{{ old('cidade') }}"
+                                            name="cidade[]" placeholder="Cidade">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <input type="text" class="form-control" name="estado" id="estado" value="{{ old('estado') }}"
+                                            name="estado[]" placeholder="Estado">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <input type="text" class="form-control" name="endereco" id="endereco" placeholder="Endereço ">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <input type="text" class="form-control" name="bairro" id="bairro" placeholder="Bairro ">
+                                    </div>
+                                    <div class="form-group col-md-2 tna-buttons">
+                                        <button type='button' class='mb-xs mr-xs btn btn-primary addmoreadress'><i
+                                                class='fa fa-plus'></i></button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="adressappendhere" class="adressappendhere">
+                            </div>
+                            <div class="form-group">
+                                <label>Observações</label>
+                                <textarea class="form-control" rows="3" name="observacoes" placeholder="(Opcional)"></textarea>
+                                </div>
 
 
-
-                      </form>
+                        </form>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                        <button type="submit" onclick="event.preventDefault();
+                        this.disabled=true;
+                        this.value='Enviando';
+                        document.getElementById('cad-form').submit(); " class="btn btn-primary">Salvar</button>
+                    </div>
                 </div>
-                <div class="modal-footer justify-content-between">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                  <button type="button" class="btn btn-primary">Salvar</button>
-                </div>
-              </div>
-              <!-- /.modal-content -->
+                <!-- /.modal-content -->
             </div>
             <!-- /.modal-dialog -->
-          </div>
-          <!-- /.modal -->
+        </div>
+        <!-- /.modal -->
     </div>
     <!-- /.content-wrapper -->
     <!-- Main Footer -->
@@ -531,42 +576,144 @@
     <!-- ./wrapper -->
 
     <!-- REQUIRED SCRIPTS -->
-     <!-- jQuery -->
-     <script src="../../plugins/jquery/jquery.min.js"></script>
-     <!-- Bootstrap 4 -->
-     <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-     <!-- AdminLTE App -->
-     <script src="../../dist/js/adminlte.min.js"></script>
-     <!-- AdminLTE for demo purposes -->
-     <script src="../../dist/js/demo.js"></script>
+    <!-- jQuery -->
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <script src="../../plugins/jquery-validation/jquery.mask.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../../dist/js/adminlte.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="../../dist/js/demo.js"></script>
     <script>
+        $('.telefone-mask').mask('(00) 0000-00009');
+        $('.telefone-mask').blur(function(event) {
+            if ($(this).val().length == 15) {
+                $('.telefone-mask').mask('(00) 00000-0009');
+            } else {
+                $('.telefone-mask').mask('(00) 0000-00009');
+            }
+        });
 
+        $(".cep-mask").mask("99.999-999");
+        $('.cep-mask').blur(function(event) {
+            $(".cep-mask").mask("99.999-999");
+        });
 
+    </script>
+    <script>
+        function limpa_formulário_cep() {
+                //Limpa valores do formulário de cep.
+                document.getElementById('endereco').value=("");
+                document.getElementById('bairro').value=("");
+                document.getElementById('cidade').value=("");
+                document.getElementById('uf').value=("");
+                // document.getElementById('ibge').value=("");
+        }
 
-$(document).on('click', '.addmorephone', function (ev) {
-	var $clone = $(this).parent().parent().clone(true);
-	var $newbuttons = "<button type='button' class='mb-xs mr-xs btn btn-primary addmorephone'><i class='fa fa-plus'></i></button>&nbsp;<button type='button' class='mb-xs mr-xs btn btn-primary removephone'><i class='fa fa-minus'></i></button>";
-	$clone.find('.tnp-buttons').html($newbuttons).end().appendTo($('#phoneappendhere'));
-});
+        function meu_callback(conteudo) {
+            if (!("erro" in conteudo)) {
+                //Atualiza os campos com os valores.
+                document.getElementById('endereco').value=(conteudo.logradouro);
+                document.getElementById('bairro').value=(conteudo.bairro);
+                document.getElementById('cidade').value=(conteudo.localidade);
+                document.getElementById('estado').value=(conteudo.uf);
+                $("#mensagem").html('');
+                // document.getElementById('ibge').value=(conteudo.ibge);
+            } //end if.
+            else {
+                //CEP não Encontrado.
+                limpa_formulário_cep();
+                $("#mensagem").html('(CEP inválido!)');
+            }
+        }
 
-$(document).on('click', '.removephone', function () {
-	$(this).parent().parent().remove();
-});
+        function pesquisacep(valor) {
 
-$(document).on('click', '.addmoreadress', function (ev) {
-    var clone = $('div.adress-group:eq(0)').clone().val("");
-    console.log(clone);
-    clone.find('[name]').each(function(i,c){
-   });
-   $('#adressappendhere').append(clone)
+            //Nova variável "cep" somente com dígitos.
+            var cep = valor.replace(/\D/g, '');
 
-	var $newbuttons = "<button type='button' class='mb-xs mr-xs btn btn-primary addmoreadress'><i class='fa fa-plus'></i></button>&nbsp;<button type='button' class='mb-xs mr-xs btn btn-primary removeadress'><i class='fa fa-minus'></i></button>";
-	$clone.find('.tna-buttons').html($newbuttons);
-});
+            //Verifica se campo cep possui valor informado.
+            if (cep != "") {
 
-$(document).on('click', '.removeadress', function () {
-	$(this).parent().parent().remove();
-});
+                //Expressão regular para validar o CEP.
+                var validacep = /^[0-9]{8}$/;
+
+                //Valida o formato do CEP.
+                if(validacep.test(cep)) {
+
+                    //Preenche os campos com "..." enquanto consulta webservice.
+                    $("#mensagem").html('(Aguarde, consultando CEP ...)');
+                    document.getElementById('endereco').value="...";
+                    document.getElementById('bairro').value="...";
+                    document.getElementById('cidade').value="...";
+                    document.getElementById('estado').value="...";
+                    // document.getElementById('ibge').value="...";
+
+                    //Cria um elemento javascript.
+                    var script = document.createElement('script');
+
+                    //Sincroniza com o callback.
+                    script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
+
+                    //Insere script no documento e carrega o conteúdo.
+                    document.body.appendChild(script);
+
+                } //end if.
+                else {
+                    //cep é inválido.
+                    limpa_formulário_cep();
+                    $("#mensagem").html('(CEP inválido!)');
+                }
+            } //end if.
+            else {
+                //cep sem valor, limpa formulário.
+                limpa_formulário_cep();
+            }
+        };
+    </script>
+    <script>
+        $(document).on('click', '.addmorephone', function(ev) {
+            var $clone = $(this).parent().parent().clone(true);
+            $clone.find("input")
+                .val("");
+            var $newbuttons =
+                "<button type='button' class='mb-xs mr-xs btn btn-primary removephone'><i class='fa fa-minus'></i></button>";
+            $clone.find('.tnp-buttons').html($newbuttons).end().appendTo($('#phoneappendhere'));
+        });
+
+        $(document).on('click', '.removephone', function() {
+            $(this).parent().parent().remove();
+        });
+
+        $(document).on('click', '.addmoremail', function(ev) {
+            var $clone = $(this).parent().parent().clone(true);
+            $clone.find("input")
+                .val("");
+            var $newbuttons =
+                "<button type='button' class='mb-xs mr-xs btn btn-primary removemail'><i class='fa fa-minus'></i></button>";
+            $clone.find('.tnm-buttons').html($newbuttons).end().appendTo($('#mailappendhere'));
+        });
+
+        $(document).on('click', '.removemail', function() {
+            $(this).parent().parent().remove();
+        });
+
+        $(document).on('click', '.addmoreadress', function(ev) {
+            var clone = $('div.adress-group:eq(0)').clone();
+            clone.find("input[type='text']")
+                .val("");
+            var $newbutton =
+                "<button type='button' class='mb-xs mr-xs btn btn-primary removeadress'><i class='fa fa-minus'></i></button>";
+            clone.find('.tna-buttons').html($newbutton);
+            clone.appendTo(".adressappendhere");
+
+        });
+
+        $(document).on('click', '.removeadress', function() {
+            $(this).closest(".adress-group").remove();
+
+        });
     </script>
 
 

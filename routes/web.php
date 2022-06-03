@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,5 +21,9 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+Route::controller(ContactController::class)->prefix('contact')->group(function () {
+    Route::post('/store', 'store')->middleware(['auth'])->name('contact.store');
+});
 
 require __DIR__.'/auth.php';
