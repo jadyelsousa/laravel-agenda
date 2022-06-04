@@ -114,15 +114,7 @@
                                         <i class="fas fa-sync-alt"></i>
                                     </button>
                                     <div class="float-right">
-                                        1-50/200
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-default btn-sm">
-                                                <i class="fas fa-chevron-left"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-default btn-sm">
-                                                <i class="fas fa-chevron-right"></i>
-                                            </button>
-                                        </div>
+                                        {{ $contacts->links()}}
 
                                     </div>
 
@@ -168,22 +160,7 @@
                             </div>
 
                             <div class="card-footer p-0">
-                                {{$contacts->links()}}
-                                <div class="mailbox-controls">
-                                    <div class="float-right">
-                                        1-50/200
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-default btn-sm">
-                                                <i class="fas fa-chevron-left"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-default btn-sm">
-                                                <i class="fas fa-chevron-right"></i>
-                                            </button>
-                                        </div>
-
-                                    </div>
-
-                                </div>
+                                {{ $contacts->links()}}
                             </div>
                         </div>
 
