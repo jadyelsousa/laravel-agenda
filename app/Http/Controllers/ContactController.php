@@ -2,7 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Auth\ContactRequest;
+use App\Models\Contato;
+use App\Models\Email;
+use App\Models\Endereco;
+use App\Models\Telefone;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
@@ -32,10 +39,49 @@ class ContactController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ContactRequest $request)
     {
-        dd($request->all());
+        $contact = new Contato();
+        $contact->nome = $request->nome;
+        $contact->sobrenome = $request->sobrenome;
+        $contact->observacoes = $request->observacoes ?? "";
+        $contact->id_usuario = Auth::user()->id;
 
+        if($contact->save()){
+
+            foreach ($request->telefone as $key => $value) {
+                $telefone = preg_replace("/[^0-9]/", "", $value);
+                $phone = new Telefone();
+                $phone->telefone = $telefone;
+                $phone->tipo = $request->tipo_telefone[$key];
+                $phone->id_contato = $contact->id;
+                $phone->save();
+            }
+
+            foreach ($request->email as $key => $value) {
+                $mail = new Email();
+                $mail->email = $value;
+                $mail->tipo = $request->tipo_email[$key];
+                $mail->id_contato = $contact->id;
+                $mail->save();
+            }
+
+            foreach($request->endereco as $key => $value){
+                $cep = preg_replace("/[^0-9]/", "", $request->cep[$key]);
+                $adress = new Endereco();
+                $adress->endereco = $value;
+                $adress->cep = $cep;
+                $adress->bairro = $request->bairro[$key];
+                $adress->cidade = $request->cidade[$key];
+                $adress->estado = $request->estado[$key];
+                $adress->id_contato = $contact->id;
+                $adress->save();
+            }
+
+            return redirect()->route('dashboard')->with('status', 'Contato cadastrado com sucesso!');
+
+        }
+        return redirect()->route('dashboard')->withErrors('error', 'Ocorreu um erro ao cadastrar, tente novamente!');;
     }
 
     /**

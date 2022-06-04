@@ -71,6 +71,9 @@
         <!-- Main content -->
         <div class="content">
             <div class="container">
+                <x-auth-session-status class="mb-4" :status="session('status')" />
+                <x-auth-validation-errors class="mb-4" :errors="$errors" />
+
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card card-primary card-outline">
@@ -127,269 +130,36 @@
                                 <div class="table-responsive mailbox-messages">
                                     <table class="table table-hover table-striped">
                                         <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="icheck-primary">
-                                                        <input type="checkbox" value="" id="check1">
-                                                        <label for="check1"></label>
-                                                    </div>
-                                                </td>
-                                                <td class="mailbox-star"><a href="#"><i
-                                                            class="fas fa-star text-warning"></i></a></td>
-                                                <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a>
-                                                </td>
-                                                <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a
-                                                    solution to this problem...
-                                                </td>
-                                                <td class="mailbox-attachment"></td>
-                                                <td class="mailbox-date"><button type="button" class="btn btn-tool"
-                                                        title="Contacts" data-widget="chat-pane-toggle">
-                                                        <i class="fas fa-comments"></i>
-                                                    </button><button type="button" class="btn btn-tool"
-                                                        title="Contacts" data-widget="chat-pane-toggle">
-                                                        <i class="fas fa-comments"></i>
-                                                    </button></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="icheck-primary">
-                                                        <input type="checkbox" value="" id="check2">
-                                                        <label for="check2"></label>
-                                                    </div>
-                                                </td>
-                                                <td class="mailbox-star"><a href="#"><i
-                                                            class="fas fa-star-o text-warning"></i></a></td>
-                                                <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a>
-                                                </td>
-                                                <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a
-                                                    solution to this problem...
-                                                </td>
-                                                <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                                                <td class="mailbox-date">28 mins ago</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="icheck-primary">
-                                                        <input type="checkbox" value="" id="check3">
-                                                        <label for="check3"></label>
-                                                    </div>
-                                                </td>
-                                                <td class="mailbox-star"><a href="#"><i
-                                                            class="fas fa-star-o text-warning"></i></a></td>
-                                                <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a>
-                                                </td>
-                                                <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a
-                                                    solution to this problem...
-                                                </td>
-                                                <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                                                <td class="mailbox-date">11 hours ago</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="icheck-primary">
-                                                        <input type="checkbox" value="" id="check4">
-                                                        <label for="check4"></label>
-                                                    </div>
-                                                </td>
-                                                <td class="mailbox-star"><a href="#"><i
-                                                            class="fas fa-star text-warning"></i></a></td>
-                                                <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a>
-                                                </td>
-                                                <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a
-                                                    solution to this problem...
-                                                </td>
-                                                <td class="mailbox-attachment"></td>
-                                                <td class="mailbox-date">15 hours ago</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="icheck-primary">
-                                                        <input type="checkbox" value="" id="check5">
-                                                        <label for="check5"></label>
-                                                    </div>
-                                                </td>
-                                                <td class="mailbox-star"><a href="#"><i
-                                                            class="fas fa-star text-warning"></i></a></td>
-                                                <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a>
-                                                </td>
-                                                <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find a
-                                                    solution to this problem...
-                                                </td>
-                                                <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                                                <td class="mailbox-date">Yesterday</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="icheck-primary">
-                                                        <input type="checkbox" value="" id="check6">
-                                                        <label for="check6"></label>
-                                                    </div>
-                                                </td>
-                                                <td class="mailbox-star"><a href="#"><i
-                                                            class="fas fa-star-o text-warning"></i></a></td>
-                                                <td class="mailbox-name"><a href="read-mail.html">Alexander
-                                                        Pierce</a>
-                                                </td>
-                                                <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                    a
-                                                    solution to this problem...
-                                                </td>
-                                                <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                                                <td class="mailbox-date">2 days ago</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="icheck-primary">
-                                                        <input type="checkbox" value="" id="check7">
-                                                        <label for="check7"></label>
-                                                    </div>
-                                                </td>
-                                                <td class="mailbox-star"><a href="#"><i
-                                                            class="fas fa-star-o text-warning"></i></a></td>
-                                                <td class="mailbox-name"><a href="read-mail.html">Alexander
-                                                        Pierce</a></td>
-                                                <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                    a solution to this problem...
-                                                </td>
-                                                <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                                                <td class="mailbox-date">2 days ago</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="icheck-primary">
-                                                        <input type="checkbox" value="" id="check8">
-                                                        <label for="check8"></label>
-                                                    </div>
-                                                </td>
-                                                <td class="mailbox-star"><a href="#"><i
-                                                            class="fas fa-star text-warning"></i></a></td>
-                                                <td class="mailbox-name"><a href="read-mail.html">Alexander
-                                                        Pierce</a></td>
-                                                <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                    a solution to this problem...
-                                                </td>
-                                                <td class="mailbox-attachment"></td>
-                                                <td class="mailbox-date">2 days ago</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="icheck-primary">
-                                                        <input type="checkbox" value="" id="check9">
-                                                        <label for="check9"></label>
-                                                    </div>
-                                                </td>
-                                                <td class="mailbox-star"><a href="#"><i
-                                                            class="fas fa-star text-warning"></i></a></td>
-                                                <td class="mailbox-name"><a href="read-mail.html">Alexander
-                                                        Pierce</a></td>
-                                                <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                    a solution to this problem...
-                                                </td>
-                                                <td class="mailbox-attachment"></td>
-                                                <td class="mailbox-date">2 days ago</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="icheck-primary">
-                                                        <input type="checkbox" value="" id="check10">
-                                                        <label for="check10"></label>
-                                                    </div>
-                                                </td>
-                                                <td class="mailbox-star"><a href="#"><i
-                                                            class="fas fa-star-o text-warning"></i></a></td>
-                                                <td class="mailbox-name"><a href="read-mail.html">Alexander
-                                                        Pierce</a></td>
-                                                <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                    a solution to this problem...
-                                                </td>
-                                                <td class="mailbox-attachment"></td>
-                                                <td class="mailbox-date">2 days ago</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="icheck-primary">
-                                                        <input type="checkbox" value="" id="check11">
-                                                        <label for="check11"></label>
-                                                    </div>
-                                                </td>
-                                                <td class="mailbox-star"><a href="#"><i
-                                                            class="fas fa-star-o text-warning"></i></a></td>
-                                                <td class="mailbox-name"><a href="read-mail.html">Alexander
-                                                        Pierce</a></td>
-                                                <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                    a solution to this problem...
-                                                </td>
-                                                <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                                                <td class="mailbox-date">4 days ago</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="icheck-primary">
-                                                        <input type="checkbox" value="" id="check12">
-                                                        <label for="check12"></label>
-                                                    </div>
-                                                </td>
-                                                <td class="mailbox-star"><a href="#"><i
-                                                            class="fas fa-star text-warning"></i></a></td>
-                                                <td class="mailbox-name"><a href="read-mail.html">Alexander
-                                                        Pierce</a></td>
-                                                <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                    a solution to this problem...
-                                                </td>
-                                                <td class="mailbox-attachment"></td>
-                                                <td class="mailbox-date">12 days ago</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="icheck-primary">
-                                                        <input type="checkbox" value="" id="check13">
-                                                        <label for="check13"></label>
-                                                    </div>
-                                                </td>
-                                                <td class="mailbox-star"><a href="#"><i
-                                                            class="fas fa-star-o text-warning"></i></a></td>
-                                                <td class="mailbox-name"><a href="read-mail.html">Alexander
-                                                        Pierce</a></td>
-                                                <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                    a solution to this problem...
-                                                </td>
-                                                <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                                                <td class="mailbox-date">12 days ago</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="icheck-primary">
-                                                        <input type="checkbox" value="" id="check14">
-                                                        <label for="check14"></label>
-                                                    </div>
-                                                </td>
-                                                <td class="mailbox-star"><a href="#"><i
-                                                            class="fas fa-star text-warning"></i></a></td>
-                                                <td class="mailbox-name"><a href="read-mail.html">Alexander
-                                                        Pierce</a></td>
-                                                <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                    a solution to this problem...
-                                                </td>
-                                                <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                                                <td class="mailbox-date">14 days ago</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="icheck-primary">
-                                                        <input type="checkbox" value="" id="check15">
-                                                        <label for="check15"></label>
-                                                    </div>
-                                                </td>
-                                                <td class="mailbox-star"><a href="#"><i
-                                                            class="fas fa-star text-warning"></i></a></td>
-                                                <td class="mailbox-name"><a href="read-mail.html">Alexander
-                                                        Pierce</a></td>
-                                                <td class="mailbox-subject"><b>AdminLTE 3.0 Issue</b> - Trying to find
-                                                    a solution to this problem...
-                                                </td>
-                                                <td class="mailbox-attachment"><i class="fas fa-paperclip"></i></td>
-                                                <td class="mailbox-date">15 days ago</td>
-                                            </tr>
+                                            @forelse ($contacts as $contact)
+                                                <tr>
+                                                    <td>
+                                                        <div class="icheck-primary">
+                                                            <input type="checkbox" value="" id="check4">
+                                                            <label for="check4"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td class="mailbox-name"><a
+                                                            href="#">{{ $contact->telefone[0]->telefone }}</a>...</td>
+                                                    <td class="mailbox-name"><a
+                                                            href="read-mail.html">{{ $contact->email[0]->email }}</a>...
+                                                    </td>
+                                                    <td class="mailbox-subject"><b>{{ $contact->nome }}</b>
+                                                        {{ $contact->sobrenome }}
+                                                    </td>
+                                                    <td class="mailbox-attachment">
+                                                        {{ $contact->endereco[0]->endereco }}
+                                                    </td>
+                                                    <td class="mailbox-date"><a href="" target="__blank"
+                                                            class="nav-link float-right">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a></td>
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td>
+                                                        Nada ainda! Adicione novos contatos!</td>
+                                                </tr>
+                                            @endforelse
                                         </tbody>
                                     </table>
 
@@ -398,26 +168,8 @@
                             </div>
 
                             <div class="card-footer p-0">
+                                {{$contacts->links()}}
                                 <div class="mailbox-controls">
-
-                                    <button type="button" class="btn btn-default btn-sm checkbox-toggle">
-                                        <i class="far fa-square"></i>
-                                    </button>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-default btn-sm">
-                                            <i class="far fa-trash-alt"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-default btn-sm">
-                                            <i class="fas fa-reply"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-default btn-sm">
-                                            <i class="fas fa-share"></i>
-                                        </button>
-                                    </div>
-
-                                    <button type="button" class="btn btn-default btn-sm">
-                                        <i class="fas fa-sync-alt"></i>
-                                    </button>
                                     <div class="float-right">
                                         1-50/200
                                         <div class="btn-group">
@@ -451,28 +203,30 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="cad-form" method="POST" action="{{route('contact.store')}}">
+                        <form role="form" id="cadForm" method="POST" action="{{ route('contact.store') }}">
                             @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="nome">Nome</label>
-                                    <input type="text" class="form-control" id="nome" name="nome" required='true' placeholder="Nome">
+                                    <input type="text" class="form-control" id="nome" name="nome" value="{{ old('nome') }}"
+                                        placeholder="Nome">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="sobrenome">Sobrenome</label>
-                                    <input type="text" class="form-control" id="sobrenome" required='true' name="sobrenome"
-                                        placeholder="Sobrenome">
+                                    <input type="text" class="form-control" id="sobrenome" value="{{ old('sobrenome') }}"
+                                        name="sobrenome" placeholder="Sobrenome">
                                 </div>
                             </div>
 
                             <label>Telefone</label>
                             <div class="form-row">
                                 <div class="form-group col-md-4">
-                                    <input type="text" class="form-control telefone-mask" name="telefone[]" id="telefone" placeholder="(__) ____-____">
+                                    <input type="text" class="form-control telefone-mask" name="telefone[]" value="{{ old('telefone.0') }}"
+                                        id="telefone" placeholder="(__) ____-____">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <select class="form-control" name="tipo[]">
-                                        <option selected >Celular</option>
+                                    <select class="form-control" name="tipo_telefone[]">
+                                        <option selected>Celular</option>
                                         <option>Comercial</option>
                                         <option>Casa</option>
                                         <option>Principal</option>
@@ -490,13 +244,13 @@
                             <label>Email</label>
                             <div class="form-row">
                                 <div class="form-group col-md-4">
-                                    <input type="text" class="form-control" name="email[]" placeholder="Email">
+                                    <input type="text" class="form-control" name="email[]" value="{{ old('email.0') }}" placeholder="Email">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <select class="form-control" name="tipo[]">
-                                        <option selected>Celular</option>
-                                        <option>Comercial</option>
-                                        <option>Casa</option>
+                                    <select class="form-control" name="tipo_email[]">
+                                        <option selected>Pessoal</option>
+                                        <option>Corporativo</option>
+                                        <option>Academico</option>
                                         <option>Principal</option>
                                         <option>Outros</option>
                                     </select>
@@ -510,29 +264,31 @@
                             <div id="mailappendhere">
                             </div>
                             <label>Endereço</label>
-                            <span id='mensagem'
-                                            style='color: red; font-size: 13px;'></span>
+                            <span id='mensagem' style='color: red; font-size: 13px;'></span>
                             <div class="adress-group">
                                 <div class="form-row">
                                     <div class="form-group col-md-2">
-                                        <input type="text" class="form-control cep-mask" name="cep" onblur="pesquisacep(this.value);"  id="cep" value="{{ old('cep') }}"
+                                        <input type="text" class="form-control cep-mask"
+                                            onblur="pesquisacep(this.value);" id="cep" value="{{ old('cep.0') }}"
                                             name="cep[]" placeholder="CEP">
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <input type="text" class="form-control" name="cidade" id="cidade" value="{{ old('cidade') }}"
-                                            name="cidade[]" placeholder="Cidade">
+                                        <input type="text" class="form-control" id="cidade"
+                                            value="{{ old('cidade.0') }}" name="cidade[]" placeholder="Cidade">
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <input type="text" class="form-control" name="estado" id="estado" value="{{ old('estado') }}"
-                                            name="estado[]" placeholder="Estado">
+                                        <input type="text" class="form-control" id="estado"
+                                            value="{{ old('estado.0') }}" name="estado[]" placeholder="Estado">
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <input type="text" class="form-control" name="endereco" id="endereco" placeholder="Endereço ">
+                                        <input type="text" class="form-control" name="endereco[]" id="endereco"
+                                            placeholder="Endereço ">
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <input type="text" class="form-control" name="bairro" id="bairro" placeholder="Bairro ">
+                                        <input type="text" class="form-control" name="bairro[]" id="bairro"
+                                            placeholder="Bairro ">
                                     </div>
                                     <div class="form-group col-md-2 tna-buttons">
                                         <button type='button' class='mb-xs mr-xs btn btn-primary addmoreadress'><i
@@ -546,28 +302,26 @@
                             <div class="form-group">
                                 <label>Observações</label>
                                 <textarea class="form-control" rows="3" name="observacoes" placeholder="(Opcional)"></textarea>
-                                </div>
+                            </div>
 
-
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                                <button type="submit" class="btn btn-primary">Salvar</button>
+                            </div>
                         </form>
                     </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                        <button type="submit" onclick="event.preventDefault();
-                        this.disabled=true;
-                        this.value='Enviando';
-                        document.getElementById('cad-form').submit(); " class="btn btn-primary">Salvar</button>
-                    </div>
+
                 </div>
                 <!-- /.modal-content -->
             </div>
             <!-- /.modal-dialog -->
         </div>
         <!-- /.modal -->
+
     </div>
     <!-- /.content-wrapper -->
     <!-- Main Footer -->
-    <footer class="main-footer">
+    <footer class=" main-footer">
 
         <!-- Default to the left -->
         <strong>Click <a href="mailto:jadyelbatera@gmail.com">here</a></strong>
@@ -585,6 +339,93 @@
     <script src="../../dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     <script src="../../dist/js/demo.js"></script>
+    <!-- jquery-validation -->
+    <script src="../../plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="../../plugins/jquery-validation/additional-methods.min.js"></script>
+
+    <!-- Page specific script -->
+    <script>
+        $(function() {
+
+            $('#cadForm').validate({
+                rules: {
+
+                    'email[]': {
+                        required: true,
+                        email: true,
+                    },
+                    'telefone[]': {
+                        required: true,
+                    },
+                    'tipo_telefone[]': {
+                        required: true,
+                    },
+                    'endereco[]': {
+                        required: true,
+                    },
+                    'bairro[]': {
+                        required: true,
+                    },
+                    'cidade[]': {
+                        required: true,
+                    },
+                    'estado[]': {
+                        required: true,
+                    },
+                    'cep[]': {
+                        required: true,
+                    },
+                    nome: {
+                        required: true,
+                    },
+                    sobrenome: {
+                        required: true
+                    },
+                },
+                messages: {
+                    'email[]': {
+                        required: "Campo obrigatório",
+                        email: "Insira um email válido."
+                    },
+                    'telefone[]': {
+                        required: "Campo obrigatório",
+                    },
+                    'endereco[]': {
+                        required: "Campo obrigatório",
+                    },
+                    'bairro[]': {
+                        required: "Campo obrigatório",
+                    },
+                    'cidade[]': {
+                        required: "Campo obrigatório",
+                    },
+                    'estado[]': {
+                        required: "Campo obrigatório",
+                    },
+                    'cep[]': {
+                        required: "Campo obrigatório",
+                    },
+                    nome: {
+                        required: "Campo obrigatório",
+                    },
+                    sobrenome: {
+                        required: "Campo obrigatório"
+                    },
+                },
+                errorElement: 'span',
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                }
+            });
+        });
+    </script>
     <script>
         $('.telefone-mask').mask('(00) 0000-00009');
         $('.telefone-mask').blur(function(event) {
@@ -599,25 +440,24 @@
         $('.cep-mask').blur(function(event) {
             $(".cep-mask").mask("99.999-999");
         });
-
     </script>
     <script>
         function limpa_formulário_cep() {
-                //Limpa valores do formulário de cep.
-                document.getElementById('endereco').value=("");
-                document.getElementById('bairro').value=("");
-                document.getElementById('cidade').value=("");
-                document.getElementById('uf').value=("");
-                // document.getElementById('ibge').value=("");
+            //Limpa valores do formulário de cep.
+            document.getElementById('endereco').value = ("");
+            document.getElementById('bairro').value = ("");
+            document.getElementById('cidade').value = ("");
+            document.getElementById('uf').value = ("");
+            // document.getElementById('ibge').value=("");
         }
 
         function meu_callback(conteudo) {
             if (!("erro" in conteudo)) {
                 //Atualiza os campos com os valores.
-                document.getElementById('endereco').value=(conteudo.logradouro);
-                document.getElementById('bairro').value=(conteudo.bairro);
-                document.getElementById('cidade').value=(conteudo.localidade);
-                document.getElementById('estado').value=(conteudo.uf);
+                document.getElementById('endereco').value = (conteudo.logradouro);
+                document.getElementById('bairro').value = (conteudo.bairro);
+                document.getElementById('cidade').value = (conteudo.localidade);
+                document.getElementById('estado').value = (conteudo.uf);
                 $("#mensagem").html('');
                 // document.getElementById('ibge').value=(conteudo.ibge);
             } //end if.
@@ -640,21 +480,21 @@
                 var validacep = /^[0-9]{8}$/;
 
                 //Valida o formato do CEP.
-                if(validacep.test(cep)) {
+                if (validacep.test(cep)) {
 
                     //Preenche os campos com "..." enquanto consulta webservice.
                     $("#mensagem").html('(Aguarde, consultando CEP ...)');
-                    document.getElementById('endereco').value="...";
-                    document.getElementById('bairro').value="...";
-                    document.getElementById('cidade').value="...";
-                    document.getElementById('estado').value="...";
+                    document.getElementById('endereco').value = "...";
+                    document.getElementById('bairro').value = "...";
+                    document.getElementById('cidade').value = "...";
+                    document.getElementById('estado').value = "...";
                     // document.getElementById('ibge').value="...";
 
                     //Cria um elemento javascript.
                     var script = document.createElement('script');
 
                     //Sincroniza com o callback.
-                    script.src = 'https://viacep.com.br/ws/'+ cep + '/json/?callback=meu_callback';
+                    script.src = 'https://viacep.com.br/ws/' + cep + '/json/?callback=meu_callback';
 
                     //Insere script no documento e carrega o conteúdo.
                     document.body.appendChild(script);
