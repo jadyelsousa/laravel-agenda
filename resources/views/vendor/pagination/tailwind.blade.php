@@ -15,7 +15,7 @@
                     <button type="button" disabled class="btn btn-default btn-sm">
                         <i class="fas fa-chevron-left"></i>
                     </button>
-                @else   
+                @else
                     <a href="{{ $paginator->previousPageUrl() }}" class="btn btn-default btn-sm">
                         <i class="fas fa-chevron-left"></i>
                     </a>
@@ -33,6 +33,5 @@
             </div>
 
         </div>
-
     </div>
 @endif

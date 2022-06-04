@@ -13,32 +13,7 @@ use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(ContactRequest $request)
     {
         $contact = new Contato();
@@ -78,52 +53,77 @@ class ContactController extends Controller
                 $adress->save();
             }
 
+            $emailUser = Auth::user()->email;
+
+            $nome = $contact->nome;
+
+            // Mail::send('mail.mailview', ['nome' => $nome ], function ($message) use ($emailUser){
+            //         $message->to($emailUser);
+            //         $message->subject('Novo contato cadastrado');
+            //         // $message->bcc('jadyelbatera@gmail.com');
+            //     });
+
             return redirect()->route('dashboard')->with('status', 'Contato cadastrado com sucesso!');
 
         }
         return redirect()->route('dashboard')->withErrors('error', 'Ocorreu um erro ao cadastrar, tente novamente!');;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+
+    public function searchSuggestion(Request $request)
     {
-        //
+        $query = $request->term;
+        $var = Contato::where('nome', 'like', "%{$query}%")
+        ->orWhereHas('telefone', function ($q) use ($query) {
+            $q->select('telefone')->where('telefone', 'like', "%{$query}%");
+        })
+        ->orWhereHas('email', function ($q) use ($query) {
+            $q->select('email')->where('email', 'like', "%{$query}%");
+        })
+        ->get();
+
+        if (is_numeric($query)) {
+           return $var->pluck('telefone.0.telefone');
+        } elseif (strpos($query,'@')) {
+           return $var->pluck('email.0.email');
+        } else {
+            return $var->pluck('nome');
+        }
+
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function search(Request $request)
     {
-        //
+        $request->validate([
+            'search' => 'required',
+        ]);
+
+        $filters = $request->only('search');
+        $query = $request->search;
+
+        $contacts = Contato::where('nome', 'like', "%{$query}%")
+        ->orWhereHas('telefone', function ($q) use ($query) {
+            $q->select('telefone')->where('telefone', 'like', "%{$query}%");
+        })
+        ->orWhereHas('email', function ($q) use ($query) {
+            $q->select('email')->where('email', 'like', "%{$query}%");
+        })
+        ->orWhereHas('endereco', function ($q) use ($query) {
+            $q->where('endereco', 'like', "%{$query}%");
+        })
+        ->paginate(10);
+
+        return view('dashboard',compact('contacts','query','filters'));
+
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
         //

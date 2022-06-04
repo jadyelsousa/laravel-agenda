@@ -27,6 +27,8 @@ Route::get('/dashboard', function () {
 
 Route::controller(ContactController::class)->prefix('contact')->group(function () {
     Route::post('/store', 'store')->middleware(['auth'])->name('contact.store');
+    Route::get('/searchSuggestion', 'searchSuggestion')->middleware(['auth'])->name('contact.searchSuggestion');
+    Route::any('/search', 'search')->middleware(['auth'])->name('contact.search');
 });
 
 require __DIR__.'/auth.php';

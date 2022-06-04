@@ -73,6 +73,9 @@
             <div class="container">
                 <x-auth-session-status class="mb-4" :status="session('status')" />
                 <x-auth-validation-errors class="mb-4" :errors="$errors" />
+                @if (isset($query))
+                    <h5>Exibindo resultados para: "{{$query}}"</h5>
+                @endif
 
                 <div class="row">
                     <div class="col-md-12">
@@ -80,42 +83,44 @@
                             <div class="card-header">
                                 <h3 class="card-title">Contatos</h3>
                                 <div class="card-tools">
-                                    <div class="input-group input-group-sm">
-                                        <input type="text" class="form-control" placeholder="Procurar Contato">
-                                        <div class="input-group-append">
-                                            <div class="btn btn-primary">
-                                                <i class="fas fa-search"></i>
+                                    <form action="{{route('contact.search')}}" method="post">
+                                        @csrf
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" class="form-control" name="search" id="search" placeholder="Procurar Contato">
+                                            <div class="input-group-append">
+                                                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
                                             </div>
+
+                                            {{-- código de autocomplete na pesquisa --}}
+                                            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+                                            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js">
+                                            </script>
+                                            <script type="text/javascript">
+                                                var route = "{{ url('contact/searchSuggestion') }}";
+                                                $('#search').typeahead({
+                                                    source: function (query, process) {
+                                                        return $.get(route, {
+                                                            term : query
+                                                        }, function (data) {
+                                                            return process(data);
+                                                        });
+                                                    }
+                                                });
+                                            </script>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
 
                             </div>
 
                             <div class="card-body p-0">
                                 <div class="mailbox-controls">
-
-                                    <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i
-                                            class="far fa-square"></i>
-                                    </button>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-default btn-sm">
-                                            <i class="far fa-trash-alt"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-default btn-sm">
-                                            <i class="fas fa-reply"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-default btn-sm">
-                                            <i class="fas fa-share"></i>
-                                        </button>
-                                    </div>
-
-                                    <button type="button" class="btn btn-default btn-sm">
-                                        <i class="fas fa-sync-alt"></i>
-                                    </button>
                                     <div class="float-right">
+                                        @if (isset($filters))
+                                        {{ $contacts->appends($filters)->links()}}
+                                        @else
                                         {{ $contacts->links()}}
-
+                                        @endif
                                     </div>
 
                                 </div>
@@ -124,12 +129,6 @@
                                         <tbody>
                                             @forelse ($contacts as $contact)
                                                 <tr>
-                                                    <td>
-                                                        <div class="icheck-primary">
-                                                            <input type="checkbox" value="" id="check4">
-                                                            <label for="check4"></label>
-                                                        </div>
-                                                    </td>
                                                     <td class="mailbox-name"><a
                                                             href="#">{{ $contact->telefone[0]->telefone }}</a>...</td>
                                                     <td class="mailbox-name"><a
@@ -139,12 +138,18 @@
                                                         {{ $contact->sobrenome }}
                                                     </td>
                                                     <td class="mailbox-attachment">
-                                                        {{ $contact->endereco[0]->endereco }}
+                                                        {{ $contact->endereco[0]->endereco }}...
                                                     </td>
-                                                    <td class="mailbox-date"><a href="" target="__blank"
-                                                            class="nav-link float-right">
-                                                            <i class="fas fa-edit"></i>
-                                                        </a></td>
+                                                    <td class="mailbox-date">
+                                                        <a href="" target="__blank"
+                                                        class="nav-link float-right">
+                                                        <i class="far fa-trash-alt"></i>
+                                                        </a>
+                                                        <a href="" target="__blank"
+                                                        class="nav-link float-right">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    </td>
                                                 </tr>
                                             @empty
                                                 <tr>
@@ -160,7 +165,11 @@
                             </div>
 
                             <div class="card-footer p-0">
+                                @if (isset($filters))
+                                {{ $contacts->appends($filters)->links()}}
+                                @else
                                 {{ $contacts->links()}}
+                                @endif
                             </div>
                         </div>
 

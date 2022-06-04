@@ -22,7 +22,7 @@
 
     <script src="{{ url('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
-    <title>Document</title>
+    <title>Login</title>
 </head>
 
 <body>
