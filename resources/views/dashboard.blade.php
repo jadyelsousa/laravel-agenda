@@ -141,12 +141,12 @@
                                                         {{ $contact->endereco[0]->endereco }}...
                                                     </td>
                                                     <td class="mailbox-date">
-                                                        <a href="" target="__blank"
-                                                        class="nav-link float-right">
+                                                        <a href="#" data-toggle="modal" data-target="#mdlExcluir" data-id="{{$contact->id}}"
+                                                        class="nav-link float-right deleteContact">
                                                         <i class="far fa-trash-alt"></i>
                                                         </a>
-                                                        <a href="" target="__blank"
-                                                        class="nav-link float-right">
+                                                        <a href="#" data-toggle="modal" data-target="#modal-lg-edit" data-contact="{{$contact}}"
+                                                        class="nav-link float-right modalEdit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                     </td>
@@ -179,6 +179,7 @@
             </div><!-- /.container-fluid -->
         </div>
         <!-- /.content -->
+        {{-- Modal de Cadastro de Contato --}}
         <div class="modal fade" id="modal-lg">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -270,11 +271,11 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <input type="text" class="form-control" name="endereco[]" id="endereco"
-                                            placeholder="Endereço ">
+                                        value="{{ old('endereco.0') }}" placeholder="Endereço ">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <input type="text" class="form-control" name="bairro[]" id="bairro"
-                                            placeholder="Bairro ">
+                                        value="{{ old('bairro.0') }}" placeholder="Bairro ">
                                     </div>
                                     <div class="form-group col-md-2 tna-buttons">
                                         <button type='button' class='mb-xs mr-xs btn btn-primary addmoreadress'><i
@@ -302,7 +303,94 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal -->
+        <!-- /. fim do modal -->
+
+        {{-- Modal de edição de contato --}}
+        <div class="modal fade" id="modal-lg-edit">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Editar Contato</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" id="editForm" method="POST" action="{{ route('contact.update') }}">
+                            @csrf
+                            <input type="hidden" name="id_contact" id="id_contact">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="nome">Nome</label>
+                                    <input type="text" class="form-control" id="edit_nome" name="edit_nome" value="{{ old('edit_nome') }}"
+                                        placeholder="Nome">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="sobrenome">Sobrenome</label>
+                                    <input type="text" class="form-control" id="edit_sobrenome" value="{{ old('edit_sobrenome') }}"
+                                        name="edit_sobrenome" placeholder="Sobrenome">
+                                </div>
+                            </div>
+
+                            <label>Telefone</label>
+                            <div class="form-row phone-row" id="phone-row">
+                                {{-- div onde serão criados campos de telefone --}}
+                            </div>
+                            <div id="phoneappendhere-edit">
+                            </div>
+                            <label>Email</label>
+                            <div class="form-row email-row" id="email-row">
+                                {{-- div onde serão criados campos de email --}}
+                            </div>
+                            <div id="mailappendhere-edit">
+                            </div>
+                            <label>Endereço</label>
+                            <span id='edit_mensagem' style='color: red; font-size: 13px;'></span>
+                            <div class="adress-group-edit" id="adress-group-edit">
+                                {{-- div onde serão criados campos de endereco --}}
+                            </div>
+                            <div id="adressappendhere-edit" class="adressappendhere-edit">
+                            </div>
+                            <div class="form-group">
+                                <label>Observações</label>
+                                <textarea class="form-control" rows="3" id="edit_observacoes" name="edit_observacoes" placeholder="(Opcional)"></textarea>
+                            </div>
+
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                                <button type="submit" class="btn btn-primary">Salvar</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /. fim do modal -->
+
+        {{-- modal de exclusão de contato --}}
+
+         <div class="modal" id="mdlExcluir" tabindex="-1" role="dialog">
+            <div class="modal-dialog" >
+                <div class="modal-content">
+                    <div class="modal-body text-center">
+                    <form class="needs-validation" id="deleteform" action="{{route('contact.destroy')}}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" name="contact" id="contactId" class="recipient-name">
+                        <br/>
+                        <span style="font-size: 30px; color: #595959"><b>Exclusão de contato</b></span><br/>
+                        <b style="font-size: 20px" class="text-danger">Tem certeza que deseja apagar esse contato?</b><br><br>
+                        <a style="min-width: 100px; margin-right: 20px" type="button" class="btn btn-default btn-tam" data-dismiss="modal">Cancelar</a>
+                        <button name="send" id="send" style="min-width: 100px" type='submit'  class='btn btn-danger btn-tam' >Excluir</button>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- fim do modal-->
 
     </div>
     <!-- /.content-wrapper -->
@@ -328,220 +416,7 @@
     <!-- jquery-validation -->
     <script src="../../plugins/jquery-validation/jquery.validate.min.js"></script>
     <script src="../../plugins/jquery-validation/additional-methods.min.js"></script>
-
-    <!-- Page specific script -->
-    <script>
-        $(function() {
-
-            $('#cadForm').validate({
-                rules: {
-
-                    'email[]': {
-                        required: true,
-                        email: true,
-                    },
-                    'telefone[]': {
-                        required: true,
-                    },
-                    'tipo_telefone[]': {
-                        required: true,
-                    },
-                    'endereco[]': {
-                        required: true,
-                    },
-                    'bairro[]': {
-                        required: true,
-                    },
-                    'cidade[]': {
-                        required: true,
-                    },
-                    'estado[]': {
-                        required: true,
-                    },
-                    'cep[]': {
-                        required: true,
-                    },
-                    nome: {
-                        required: true,
-                    },
-                    sobrenome: {
-                        required: true
-                    },
-                },
-                messages: {
-                    'email[]': {
-                        required: "Campo obrigatório",
-                        email: "Insira um email válido."
-                    },
-                    'telefone[]': {
-                        required: "Campo obrigatório",
-                    },
-                    'endereco[]': {
-                        required: "Campo obrigatório",
-                    },
-                    'bairro[]': {
-                        required: "Campo obrigatório",
-                    },
-                    'cidade[]': {
-                        required: "Campo obrigatório",
-                    },
-                    'estado[]': {
-                        required: "Campo obrigatório",
-                    },
-                    'cep[]': {
-                        required: "Campo obrigatório",
-                    },
-                    nome: {
-                        required: "Campo obrigatório",
-                    },
-                    sobrenome: {
-                        required: "Campo obrigatório"
-                    },
-                },
-                errorElement: 'span',
-                errorPlacement: function(error, element) {
-                    error.addClass('invalid-feedback');
-                    element.closest('.form-group').append(error);
-                },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-invalid');
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
-                }
-            });
-        });
-    </script>
-    <script>
-        $('.telefone-mask').mask('(00) 0000-00009');
-        $('.telefone-mask').blur(function(event) {
-            if ($(this).val().length == 15) {
-                $('.telefone-mask').mask('(00) 00000-0009');
-            } else {
-                $('.telefone-mask').mask('(00) 0000-00009');
-            }
-        });
-
-        $(".cep-mask").mask("99.999-999");
-        $('.cep-mask').blur(function(event) {
-            $(".cep-mask").mask("99.999-999");
-        });
-    </script>
-    <script>
-        function limpa_formulário_cep() {
-            //Limpa valores do formulário de cep.
-            document.getElementById('endereco').value = ("");
-            document.getElementById('bairro').value = ("");
-            document.getElementById('cidade').value = ("");
-            document.getElementById('uf').value = ("");
-            // document.getElementById('ibge').value=("");
-        }
-
-        function meu_callback(conteudo) {
-            if (!("erro" in conteudo)) {
-                //Atualiza os campos com os valores.
-                document.getElementById('endereco').value = (conteudo.logradouro);
-                document.getElementById('bairro').value = (conteudo.bairro);
-                document.getElementById('cidade').value = (conteudo.localidade);
-                document.getElementById('estado').value = (conteudo.uf);
-                $("#mensagem").html('');
-                // document.getElementById('ibge').value=(conteudo.ibge);
-            } //end if.
-            else {
-                //CEP não Encontrado.
-                limpa_formulário_cep();
-                $("#mensagem").html('(CEP inválido!)');
-            }
-        }
-
-        function pesquisacep(valor) {
-
-            //Nova variável "cep" somente com dígitos.
-            var cep = valor.replace(/\D/g, '');
-
-            //Verifica se campo cep possui valor informado.
-            if (cep != "") {
-
-                //Expressão regular para validar o CEP.
-                var validacep = /^[0-9]{8}$/;
-
-                //Valida o formato do CEP.
-                if (validacep.test(cep)) {
-
-                    //Preenche os campos com "..." enquanto consulta webservice.
-                    $("#mensagem").html('(Aguarde, consultando CEP ...)');
-                    document.getElementById('endereco').value = "...";
-                    document.getElementById('bairro').value = "...";
-                    document.getElementById('cidade').value = "...";
-                    document.getElementById('estado').value = "...";
-                    // document.getElementById('ibge').value="...";
-
-                    //Cria um elemento javascript.
-                    var script = document.createElement('script');
-
-                    //Sincroniza com o callback.
-                    script.src = 'https://viacep.com.br/ws/' + cep + '/json/?callback=meu_callback';
-
-                    //Insere script no documento e carrega o conteúdo.
-                    document.body.appendChild(script);
-
-                } //end if.
-                else {
-                    //cep é inválido.
-                    limpa_formulário_cep();
-                    $("#mensagem").html('(CEP inválido!)');
-                }
-            } //end if.
-            else {
-                //cep sem valor, limpa formulário.
-                limpa_formulário_cep();
-            }
-        };
-    </script>
-    <script>
-        $(document).on('click', '.addmorephone', function(ev) {
-            var $clone = $(this).parent().parent().clone(true);
-            $clone.find("input")
-                .val("");
-            var $newbuttons =
-                "<button type='button' class='mb-xs mr-xs btn btn-primary removephone'><i class='fa fa-minus'></i></button>";
-            $clone.find('.tnp-buttons').html($newbuttons).end().appendTo($('#phoneappendhere'));
-        });
-
-        $(document).on('click', '.removephone', function() {
-            $(this).parent().parent().remove();
-        });
-
-        $(document).on('click', '.addmoremail', function(ev) {
-            var $clone = $(this).parent().parent().clone(true);
-            $clone.find("input")
-                .val("");
-            var $newbuttons =
-                "<button type='button' class='mb-xs mr-xs btn btn-primary removemail'><i class='fa fa-minus'></i></button>";
-            $clone.find('.tnm-buttons').html($newbuttons).end().appendTo($('#mailappendhere'));
-        });
-
-        $(document).on('click', '.removemail', function() {
-            $(this).parent().parent().remove();
-        });
-
-        $(document).on('click', '.addmoreadress', function(ev) {
-            var clone = $('div.adress-group:eq(0)').clone();
-            clone.find("input[type='text']")
-                .val("");
-            var $newbutton =
-                "<button type='button' class='mb-xs mr-xs btn btn-primary removeadress'><i class='fa fa-minus'></i></button>";
-            clone.find('.tna-buttons').html($newbutton);
-            clone.appendTo(".adressappendhere");
-
-        });
-
-        $(document).on('click', '.removeadress', function() {
-            $(this).closest(".adress-group").remove();
-
-        });
-    </script>
-
+    <script src="../../dist/js/dashboardValidation.js"></script>
 
 </body>
 

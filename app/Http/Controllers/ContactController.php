@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\ContactRequest;
+use App\Http\Requests\Auth\UpdateContactRequest;
 use App\Models\Contato;
 use App\Models\Email;
 use App\Models\Endereco;
@@ -118,14 +119,126 @@ class ContactController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function update(UpdateContactRequest $request)
     {
-        //
+
+        if (!$contact = Contato::find($request->id_contact)) {
+            return back()->withErrors([
+                'Erro' => 'Algumas informações estão incorretas',
+            ]);
+        }
+
+        $contact->nome = $request->edit_nome;
+        $contact->sobrenome = $request->edit_sobrenome;
+        $contact->observacoes = $request->edit_observacoes ?? "";
+
+        if ($contact->telefone()->count() == count($request->edit_telefone)) {
+
+            foreach ($contact->telefone as $key =>  $phone) {
+                $phone->telefone = $request->edit_telefone[$key];
+                $phone->tipo = $request->edit_tipo_telefone[$key];
+                $phone->update();
+
+            }
+        }else{
+            $contact->telefone()->delete();
+            foreach ($request->edit_telefone as $key => $telefone) {
+               $phone = new Telefone();
+               $phone->telefone = $telefone;
+               $phone->tipo = $request->edit_tipo_telefone[$key];
+               $phone->id_contato = $contact->id;
+               $phone->save();
+            }
+        }
+
+        if ($contact->email()->count() == count($request->edit_email)) {
+
+            foreach ($contact->email as $key =>  $mail) {
+                $mail->email = $request->edit_email[$key];
+                $mail->tipo = $request->edit_tipo_email[$key];
+                $mail->update();
+
+            }
+        }else{
+            $contact->email()->delete();
+            foreach ($request->edit_email as $key => $email) {
+               $mail = new Email();
+               $mail->email = $email;
+               $mail->tipo = $request->edit_tipo_email[$key];
+               $mail->id_contato = $contact->id;
+               $mail->save();
+
+
+            }
+        }
+
+        if ($contact->endereco()->count() == count($request->edit_endereco)) {
+
+            foreach ($contact->endereco as $key =>  $adress) {
+                $adress->endereco = $request->edit_endereco[$key];
+                $adress->cep = $request->edit_cep[$key];
+                $adress->bairro = $request->edit_bairro[$key];
+                $adress->cidade = $request->edit_cidade[$key];
+                $adress->estado = $request->edit_estado[$key];
+                $adress->update();
+
+            }
+        }else{
+            $contact->endereco()->delete();
+            foreach ($request->edit_endereco as $key => $endereco) {
+               $adress = new Endereco();
+               $adress->endereco = $request->edit_endereco[$key];
+               $adress->cep = $request->edit_cep[$key];
+               $adress->bairro = $request->edit_bairro[$key];
+               $adress->cidade = $request->edit_cidade[$key];
+               $adress->estado = $request->edit_estado[$key];
+               $adress->id_contato = $contact->id;
+               $adress->save();
+
+            }
+        }
+
+        $contact->update();
+
+        return redirect()->route('dashboard')->with('status', 'Contato editado com sucesso!');
+
+
     }
 
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $request->validate([
+            'contact' => 'required',
+        ]);
+
+        if (!$contact = Contato::find($request->contact)) {
+            return back()->withErrors([
+                'Erro' => 'Algumas informações estão incorretas',
+            ]);
+        }
+
+        if ($contact->telefone()->exists()) {
+            foreach ($contact->telefone as $telefone) {
+                $telefone->delete();
+            }
+        }
+
+        if ($contact->email()->exists()) {
+            foreach ($contact->email as $email) {
+                $email->delete();
+            }
+        }
+
+        if ($contact->endereco()->exists()) {
+            foreach ($contact->endereco as $endereco) {
+                $endereco->delete();
+            }
+        }
+
+        $contact->delete();
+
+        return redirect()->route('dashboard')->with('status', 'O contato foi apagado!');
+
     }
 }
