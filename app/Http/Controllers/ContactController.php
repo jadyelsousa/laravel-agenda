@@ -80,7 +80,6 @@ class ContactController extends Controller
     {
         $query = $request->term;
         // busca no banco uma correspodência para sugestão de pesquisa em contato, telefone ou email
-        // $var = Contato::where("id_usuario",Auth::user()->id)->get();
         $var = Contato::where('nome', 'like', "%{$query}%")
         ->orWhereHas('telefone', function ($q) use ($query) {
             $q->select('telefone')->where('telefone', 'like', "%{$query}%");
@@ -90,14 +89,6 @@ class ContactController extends Controller
         })
         ->get();
         $var = $var->where("id_usuario",Auth::user()->id);
-        // $var = $var->where("id_usuario",Auth::user()->id)->where('nome', 'like', "%{$query}%")
-        // ->orWhereHas('telefone', function ($q) use ($query) {
-        //     $q->select('telefone')->where('telefone', 'like', "%{$query}%");
-        // })
-        // ->orWhereHas('email', function ($q) use ($query) {
-        //     $q->select('email')->where('email', 'like', "%{$query}%");
-        // })
-        // ->get();
 
         // verifica o tipo da variável que veio da request para dá uma sugestão correspondente
         if (is_numeric($query)) {
