@@ -115,42 +115,52 @@
 
                             <div class="card-body p-0">
                                 <div class="mailbox-controls">
-                                    <div class="float-right">
+                                    {{-- <div class="float-right">
                                         @if (isset($filters))
                                         {{ $contacts->appends($filters)->links()}}
                                         @else
                                         {{ $contacts->links()}}
                                         @endif
-                                    </div>
+                                    </div> --}}
 
                                 </div>
                                 <div class="table-responsive mailbox-messages">
                                     <table class="table table-hover table-striped">
                                         <tbody>
-                                            @forelse ($contacts as $contact)
+                                            @forelse ($contacts as $key => $contact)
                                                 <tr>
-                                                    <td class="mailbox-name"><a
-                                                            href="#">{{ $contact->telefone[0]->telefone }}</a>...</td>
-                                                    <td class="mailbox-name"><a
-                                                            href="read-mail.html">{{ $contact->email[0]->email }}</a>...
+                                                    <td><h5>{{$key}}</h5></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                @foreach ($contact as $item)
+                                                <tr>
+                                                    <td class="mailbox-subject"><b>{{ $item->nome }}</b>
+                                                        {{ $item->sobrenome }}
                                                     </td>
-                                                    <td class="mailbox-subject"><b>{{ $contact->nome }}</b>
-                                                        {{ $contact->sobrenome }}
+                                                    <td class="mailbox-name"><a
+                                                            href="tel:{{ $item->telefone[0]->telefone }}">{{ $item->telefone[0]->telefone }}</a>...</td>
+                                                    <td class="mailbox-name"><a
+                                                            href="mailto:{{$item->email[0]->email}}">{{ $item->email[0]->email }}</a>...
                                                     </td>
                                                     <td class="mailbox-attachment">
-                                                        {{ $contact->endereco[0]->endereco }}...
+                                                        {{ $item->endereco[0]->endereco }}...
                                                     </td>
                                                     <td class="mailbox-date">
-                                                        <a href="#" data-toggle="modal" data-target="#mdlExcluir" data-id="{{$contact->id}}"
+                                                        <a href="#" data-toggle="modal" data-target="#mdlExcluir" data-id="{{$item->id}}"
                                                         class="nav-link float-right deleteContact">
                                                         <i class="far fa-trash-alt"></i>
                                                         </a>
-                                                        <a href="#" data-toggle="modal" data-target="#modal-lg-edit" data-contact="{{$contact}}"
+                                                        <a href="#" data-toggle="modal" data-target="#modal-lg-edit" data-contact="{{$item}}"
                                                         class="nav-link float-right modalEdit">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                     </td>
                                                 </tr>
+                                                @endforeach
+
                                             @empty
                                                 <tr>
                                                     <td>
@@ -165,11 +175,11 @@
                             </div>
 
                             <div class="card-footer p-0">
-                                @if (isset($filters))
+                                {{-- @if (isset($filters))
                                 {{ $contacts->appends($filters)->links()}}
                                 @else
                                 {{ $contacts->links()}}
-                                @endif
+                                @endif --}}
                             </div>
                         </div>
 
@@ -256,7 +266,7 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-2">
                                         <input type="text" class="form-control cep-mask"
-                                            onblur="pesquisacep(this.value);" id="cep" value="{{ old('cep.0') }}"
+                                            onblur="pesquisacep(this);" id="cep" value="{{ old('cep.0') }}"
                                             name="cep[]" placeholder="CEP">
                                     </div>
                                     <div class="form-group col-md-6">
@@ -288,7 +298,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Observações</label>
-                                <textarea class="form-control" rows="3" name="observacoes" placeholder="(Opcional)"></textarea>
+                                <textarea class="form-control" rows="3" name="observacoes" id="observacoes" placeholder="(Opcional)"></textarea>
                             </div>
 
                             <div class="modal-footer justify-content-between">

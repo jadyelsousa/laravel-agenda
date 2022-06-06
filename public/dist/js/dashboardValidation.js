@@ -180,79 +180,46 @@ $('.telefone-mask').mask('(00) 0000-00009');
             $(".cep-mask").mask("99.999-999");
         });
 
+
 // Busca de Endereço por cep - api viacep
-
-function limpa_formulário_cep() {
-    //Limpa valores do formulário de cep.
-    document.getElementById('endereco').value = ("");
-    document.getElementById('bairro').value = ("");
-    document.getElementById('cidade').value = ("");
-    document.getElementById('uf').value = ("");
-    // document.getElementById('ibge').value=("");
-}
-
-function meu_callback(conteudo) {
-    if (!("erro" in conteudo)) {
-        //Atualiza os campos com os valores.
-        document.getElementById('endereco').value = (conteudo.logradouro);
-        document.getElementById('bairro').value = (conteudo.bairro);
-        document.getElementById('cidade').value = (conteudo.localidade);
-        document.getElementById('estado').value = (conteudo.uf);
-        $("#mensagem").html('');
-        // document.getElementById('ibge').value=(conteudo.ibge);
-    } //end if.
-    else {
-        //CEP não Encontrado.
-        limpa_formulário_cep();
-        $("#mensagem").html('(CEP inválido!)');
-    }
-}
 
 function pesquisacep(valor) {
 
-    //Nova variável "cep" somente com dígitos.
-    var cep = valor.replace(/\D/g, '');
+    var cep = valor.value;
+    var inputCidade = valor.parentElement.nextElementSibling.firstElementChild;
+    var inputEstado = inputCidade.parentElement.nextElementSibling.firstElementChild;
+    var inputEndereco = valor.parentElement.parentElement.parentElement.lastElementChild.firstElementChild.firstElementChild;
+    var inputBairro = inputEndereco.parentElement.nextElementSibling.firstElementChild;
 
-    //Verifica se campo cep possui valor informado.
+
     if (cep != "") {
-
-        //Expressão regular para validar o CEP.
-        var validacep = /^[0-9]{8}$/;
-
-        //Valida o formato do CEP.
-        if (validacep.test(cep)) {
-
-            //Preenche os campos com "..." enquanto consulta webservice.
-            $("#mensagem").html('(Aguarde, consultando CEP ...)');
-            document.getElementById('endereco').value = "...";
-            document.getElementById('bairro').value = "...";
-            document.getElementById('cidade').value = "...";
-            document.getElementById('estado').value = "...";
-            // document.getElementById('ibge').value="...";
-
-            //Cria um elemento javascript.
-            var script = document.createElement('script');
-
-            //Sincroniza com o callback.
-            script.src = 'https://viacep.com.br/ws/' + cep + '/json/?callback=meu_callback';
-
-            //Insere script no documento e carrega o conteúdo.
-            document.body.appendChild(script);
-
-        } //end if.
-        else {
-            //cep é inválido.
-            limpa_formulário_cep();
-            $("#mensagem").html('(CEP inválido!)');
+        cep = cep.replace("-", "").replace(".", "");
+        $("#mensagem").html('(Aguarde, consultando CEP ...)');
+        var url = 'https://viacep.com.br/ws/'+cep+'/json/';
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                var result = JSON.parse(this.responseText);
+                if(result.erro != true){
+                    console.log(result);
+                    inputEndereco.setAttribute("value",result.logradouro);
+                    inputEstado.setAttribute("value",result.uf);
+                    inputBairro.setAttribute("value",result.bairro);
+                    inputCidade.setAttribute("value",result.localidade);
+                    $("#observacoes").focus();
+                    $("#mensagem").html('');
+                }else{
+                    $("#mensagem").html('(CEP inválido!)');
+                }
+            }
         }
-    } //end if.
-    else {
-        //cep sem valor, limpa formulário.
-        limpa_formulário_cep();
+        };
+        xhttp.open('GET', url, true);
+        xhttp.send();
     }
-};
 
-
+}
 // Script que clona o campo de telefone;
 
 
@@ -271,13 +238,6 @@ $(document).on('click', '.addmorephone', function(ev) {
 $(document).on('click', '.removephone', function() {
     $(this).parent().parent().remove();
 });
-
-
-
-
-
-
-
 
 
 // Script que clona o campo de email;
@@ -300,8 +260,8 @@ $(document).on('click', '.removemail', function() {
 
 $(document).on('click', '.addmoreadress', function(ev) {
     var clone = $('div.adress-group:eq(0)').clone();
-    clone.find("input[type='text']")
-        .val("");
+    clone.find("input").attr("value","");
+
     var $newbutton =
         "<button type='button' class='mb-xs mr-xs btn btn-primary removeadress'><i class='fa fa-minus'></i></button>";
     clone.find('.tna-buttons').html($newbutton);
@@ -317,21 +277,14 @@ $(document).on('click', '.removeadress', function() {
 });
 
 
-
-
-
-
 // Script que clona o campo de telefone do modal editar;
 
-var counter = (function(){
-    var counter = 1;
-    return function(){
-      return  counter++;
-      }
-  })();
+
 
   $('.addmorephone-edit').on('click', function() {
-
+    var $clone = $(this).parent().parent().clone(true).last();
+    $clone.find("input")
+        .val("");
   });
 
   $('.removephone-edit').on('click', function() {
@@ -340,28 +293,25 @@ var counter = (function(){
   });
 
 $(document).on('click', '.addmorephone-edit', function(ev) {
-    var clone = $('div.phone-row:eq(0)').clone();
-     clone.find('[id]').each(function(i,c){
-       $(c).attr('id', $(c).attr('id') + counter());
-       $(c).attr('value', "");
-     });
-     $('#phoneappendhere-edit').append(clone)
+    var $clone = $(this).parent().parent().clone();
+    $clone.find("input")
+        .val("");
+     $('#phoneappendhere-edit').append($clone)
     var $newbuttons =
-        "";
+        "<button type='button' class='mb-xs mr-xs btn btn-primary removephone-edit'><i class='fa fa-minus'></i></button>";
     $clone.find('.tnp-buttons').html($newbuttons).end().appendTo($('#phoneappendhere-edit'));
 });
 
 // // Script que remove o campo de telefone do modal editar;
 
 $(document).on('click', '.removephone-edit', function() {
-    if($('div.phone-row').length !=1)
-      $('div.phone-row:last').remove();
+    $(this).parent().parent().remove();
 });
 
 
 // Script que clona o campo de email do modal editar;
 $(document).on('click', '.addmoremail-edit', function(ev) {
-    var $clone = $(this).parent().parent().clone(true);
+    var $clone = $(this).parent().parent().clone().last();
     $clone.find("input")
         .val("");
     var $newbuttons =
@@ -378,9 +328,9 @@ $(document).on('click', '.removemail-edit', function() {
 // Script que clona os campos de endereço do modal editar;
 
 $(document).on('click', '.addmoreadress-edit', function(ev) {
-    var clone = $('div.adress-group-edit:eq(0)').clone();
-    clone.find("input[type='text']")
-        .val("");
+    var clone = $('div.adress-group-edit:eq(0)').clone().last();
+    // clone.find("input[type='text']")
+    //     .val("");
     var $newbutton =
         "<button type='button' class='mb-xs mr-xs btn btn-primary removeadress-edit'><i class='fa fa-minus'></i></button>";
     clone.find('.tna-buttons').html($newbutton);
@@ -414,9 +364,12 @@ $(document).on('click', '.modalEdit', function() {
 
     // limpa os dados dessas classes toda vez que clicar em editar
     $(".phone-row").html("");
+    $("#phoneappendhere-edit").html("");
     $(".email-row").html("");
-    $(".phone-row").html("");
+    $("#mailappendhere-edit").html("");
     $(".adress-group-edit").html("");
+    $("#adressappendhere-edit").html("");
+
     var newId = 0;
     // recebe os dados do contato clicado
     var contact = $(this).attr('data-contact');
@@ -429,11 +382,17 @@ $(document).on('click', '.modalEdit', function() {
 
     // pegando as divs onde vão ser criados os elementos
     var telefoneDiv = document.getElementById("phone-row");
+    var telefoneAppendDiv = document.getElementById("phoneappendhere-edit");
     var emailDiv = document.getElementById("email-row");
+    var emailAppendDiv = document.getElementById("mailappendhere-edit");
     var enderecoDiv = document.getElementById("adress-group-edit");
+    var enderecoAppendDiv = document.getElementById("adressappendhere-edit");
+
 
     contact.telefone.map( divisao => {
         // pecorrer os contatos e criar os elementos
+        var divPrincial = document.createElement('div');
+        divPrincial.setAttribute("class","form-row");
         var divOne = document.createElement('div');
         divOne.setAttribute("class","form-group col-md-4");
         var inputTelefone = document.createElement('input');
@@ -451,6 +410,7 @@ $(document).on('click', '.modalEdit', function() {
         selectTelefone.setAttribute("name","edit_tipo_telefone[]");
         var optionOneTelefone = document.createElement('option');
         optionOneTelefone.innerHTML = "Celular";
+        // verifica qual elemento está marcado no banco de dados
         if (divisao.tipo == "Celular") {
             optionOneTelefone.setAttribute('selected', 'selected');
         }
@@ -482,30 +442,33 @@ $(document).on('click', '.modalEdit', function() {
         divTwo.appendChild(selectTelefone);
         var divThree = document.createElement('div');
         divThree.setAttribute("class","form-group col-md-2 tnp-buttons");
-        var buttonTelefoneUm = document.createElement('button');
-        buttonTelefoneUm.setAttribute("type","button");
-        buttonTelefoneUm.setAttribute("class","mb-xs mr-xs btn btn-primary addmorephone-edit");
-        var buttonIconTelefoneUm = document.createElement('i');
-        buttonIconTelefoneUm.setAttribute("class","fa fa-plus");
-        var buttonTelefoneDois = document.createElement('button');
-        buttonTelefoneDois.setAttribute("type","button");
-        buttonTelefoneDois.setAttribute("class","mb-xs mr-xs btn btn-primary removephone-edit");
-        var buttonIconTelefoneDois = document.createElement('i');
-        buttonIconTelefoneDois.setAttribute("class","fa fa-minus");
-        // if (newId > 0) {
-        //     buttonTelefone.setAttribute("class","mb-xs mr-xs btn btn-primary removephone-edit");
-        //     var buttonIconTelefone = document.createElement('i');
-        //     buttonIconTelefone.setAttribute("class","fa fa-minus");
-        // }else {
-        //
-        // }
-        buttonTelefoneUm.appendChild(buttonIconTelefoneUm);
-        buttonTelefoneDois.appendChild(buttonIconTelefoneDois);
-        divThree.appendChild(buttonTelefoneUm);
-        divThree.appendChild(buttonTelefoneDois);
-        telefoneDiv.appendChild(divOne);
-        telefoneDiv.appendChild(divTwo);
-        telefoneDiv.appendChild(divThree);
+        var buttonTelefone = document.createElement('button');
+        buttonTelefone.setAttribute("type","button");
+        // verifica para criação do botão de mais ou menos
+        if (newId > 0) {
+            buttonTelefone.setAttribute("class","mb-xs mr-xs btn btn-primary removephone-edit");
+            var buttonIconTelefone = document.createElement('i');
+            buttonIconTelefone.setAttribute("class","fa fa-minus");
+        }else {
+            buttonTelefone.setAttribute("class","mb-xs mr-xs btn btn-primary addmorephone-edit");
+            var buttonIconTelefone = document.createElement('i');
+            buttonIconTelefone.setAttribute("class","fa fa-plus");
+        }
+
+        buttonTelefone.appendChild(buttonIconTelefone);
+        divThree.appendChild(buttonTelefone);
+        // verifica onde a div será colocada
+        if (newId > 0) {
+            divPrincial.appendChild(divOne);
+            divPrincial.appendChild(divTwo);
+            divPrincial.appendChild(divThree);
+            telefoneAppendDiv.appendChild(divPrincial);
+        }else {
+            telefoneDiv.appendChild(divOne);
+            telefoneDiv.appendChild(divTwo);
+            telefoneDiv.appendChild(divThree);
+        }
+
         newId++;
 
     });
@@ -513,6 +476,8 @@ $(document).on('click', '.modalEdit', function() {
     newId = 0;
     contact.email.map( divisao => {
         // pecorrer os emails e criar os elementos
+        var divPrincial = document.createElement('div');
+        divPrincial.setAttribute("class","form-row")
         var divOne = document.createElement('div');
         divOne.setAttribute("class","form-group col-md-4");
         var inputEmail = document.createElement('input');
@@ -575,15 +540,26 @@ $(document).on('click', '.modalEdit', function() {
         }
         buttonEmail.appendChild(buttonIconEmail);
         divThree.appendChild(buttonEmail);
-        emailDiv.appendChild(divOne);
-        emailDiv.appendChild(divTwo);
-        emailDiv.appendChild(divThree);
+
+        if (newId > 0) {
+            divPrincial.appendChild(divOne);
+            divPrincial.appendChild(divTwo);
+            divPrincial.appendChild(divThree);
+            emailAppendDiv.appendChild(divPrincial);
+        }else {
+            emailDiv.appendChild(divOne);
+            emailDiv.appendChild(divTwo);
+            emailDiv.appendChild(divThree);
+        }
+
         newId++;
     });
 
     newId = 0;
     contact.endereco.map( divisao => {
         // pecorrer os enderecos e criar os elementos
+        var divPrincipal = document.createElement('div');
+        divPrincipal.setAttribute("class","adress-group-edit")
         var divOne = document.createElement('div');
         divOne.setAttribute("class","form-row");
         var divTwo = document.createElement('div');
@@ -591,10 +567,10 @@ $(document).on('click', '.modalEdit', function() {
         var inputCep = document.createElement('input');
         inputCep.setAttribute("type","text");
         inputCep.setAttribute("class","form-control cep-mask");
-        inputCep.setAttribute("onblur","pesquisacep(this.value);");
+        inputCep.setAttribute("onblur","pesquisacep(this);");
         inputCep.setAttribute("id","edit_cep");
         inputCep.setAttribute("value",divisao.cep);
-        inputCep.setAttribute("name","edit_cep");
+        inputCep.setAttribute("name","edit_cep[]");
         inputCep.setAttribute("placeholder","CEP");
         divTwo.appendChild(inputCep);
         var divThree = document.createElement('div');
@@ -604,7 +580,7 @@ $(document).on('click', '.modalEdit', function() {
         inputCidade.setAttribute("class","form-control");
         inputCidade.setAttribute("id","edit_cidade");
         inputCidade.setAttribute("value",divisao.cidade);
-        inputCidade.setAttribute("name","edit_cidade");
+        inputCidade.setAttribute("name","edit_cidade[]");
         inputCidade.setAttribute("placeholder","Cidade");
         divThree.appendChild(inputCidade);
         var divFour = document.createElement('div');
@@ -614,7 +590,7 @@ $(document).on('click', '.modalEdit', function() {
         inputEstado.setAttribute("class","form-control");
         inputEstado.setAttribute("id","edit_estado");
         inputEstado.setAttribute("value",divisao.estado);
-        inputEstado.setAttribute("name","edit_estado");
+        inputEstado.setAttribute("name","edit_estado[]");
         inputEstado.setAttribute("placeholder","Estado");
         divFour.appendChild(inputEstado);
         divOne.appendChild(divTwo);
@@ -629,7 +605,7 @@ $(document).on('click', '.modalEdit', function() {
         inputEndereco.setAttribute("class","form-control");
         inputEndereco.setAttribute("id","edit_endereco");
         inputEndereco.setAttribute("value",divisao.endereco);
-        inputEndereco.setAttribute("name","edit_endereco");
+        inputEndereco.setAttribute("name","edit_endereco[]");
         inputEndereco.setAttribute("placeholder","Endereco");
         divSix.appendChild(inputEndereco);
         var divSeven = document.createElement('div');
@@ -639,7 +615,7 @@ $(document).on('click', '.modalEdit', function() {
         inputBairro.setAttribute("class","form-control");
         inputBairro.setAttribute("id","edit_bairro");
         inputBairro.setAttribute("value",divisao.bairro);
-        inputBairro.setAttribute("name","edit_bairro");
+        inputBairro.setAttribute("name","edit_bairro[]");
         inputBairro.setAttribute("placeholder","Bairro");
         divSeven.appendChild(inputBairro);
         var divEight = document.createElement('div');
@@ -661,8 +637,15 @@ $(document).on('click', '.modalEdit', function() {
         divFive.appendChild(divSix);
         divFive.appendChild(divSeven);
         divFive.appendChild(divEight);
-        enderecoDiv.appendChild(divOne);
-        enderecoDiv.appendChild(divFive);
+        if (newId > 0) {
+            divPrincipal.appendChild(divOne);
+            divPrincipal.appendChild(divFive);
+            enderecoAppendDiv.appendChild(divPrincipal);
+        }else {
+            enderecoDiv.appendChild(divOne);
+            enderecoDiv.appendChild(divFive);
+
+        }
         newId++;
 
     });

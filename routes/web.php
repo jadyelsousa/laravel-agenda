@@ -22,15 +22,11 @@ Route::get('/', function () {
 })->middleware('guest');
 
 Route::get('/dashboard', function () {
-    $contacts = Contato::where('id_usuario',Auth::user()->id)->paginate(10);
-    // $contacts = $contacts->sortBy('nome')->groupBy(function ($item, $key) {
-    //     return substr($item['nome'], 0, 1);
-    // });
+    $contacts = Contato::where('id_usuario',Auth::user()->id)->orderBy('nome', 'asc')->get();
+    $contacts = $contacts->groupBy(function ($item, $key) {
+        return  $item->nome[0];
+    });
 
-    // dd($contacts);
-    // foreach ($contacts as $contact) {
-    //     dd($contact);
-    // }
     return view('dashboard',compact('contacts'));
 })->middleware(['auth'])->name('dashboard');
 

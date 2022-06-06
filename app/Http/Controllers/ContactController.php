@@ -112,7 +112,11 @@ class ContactController extends Controller
         ->orWhereHas('endereco', function ($q) use ($query) {
             $q->where('endereco', 'like', "%{$query}%");
         })
-        ->paginate(10);
+        ->orderBy('nome', 'asc')->get();
+
+        $contacts = $contacts->groupBy(function ($item) {
+            return  $item->nome[0];
+        });
 
         return view('dashboard',compact('contacts','query','filters'));
 

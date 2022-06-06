@@ -25,7 +25,7 @@
                 <p class="login-box-msg">Cadastre-se para acessar o sistema</p>
                 <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-                <form method="POST" action="{{ route('register') }}">
+                <form method="POST" id="registerForm" action="{{ route('register') }}">
                     @csrf
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" name="name" value="{{ old('name') }}" required
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" name="password" required placeholder="Senha">
+                        <input type="password" class="form-control" name="password" id="password" required placeholder="Senha">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -68,10 +68,7 @@
                         </div>
 
                         <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block" onclick="event.preventDefault();
-                            this.disabled=true;
-                            this.value='Enviando';
-                            this.closest('form').submit();">Cadastrar</button>
+                            <button type="submit" class="btn btn-primary btn-block">Cadastrar</button>
                         </div>
 
                     </div>
@@ -89,6 +86,12 @@
     <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <script src="../../dist/js/adminlte.min.js?v=3.2.0"></script>
+    <!-- jquery-validation -->
+    <script src="../../plugins/jquery-validation/jquery.validate.min.js"></script>
+    <script src="../../plugins/jquery-validation/additional-methods.min.js"></script>
+
+    <script src="../../dist/js/registerValidation.js"></script>
+
 
 
 </body>
