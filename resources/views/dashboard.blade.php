@@ -86,7 +86,7 @@
                                     <form action="{{route('contact.search')}}" method="post">
                                         @csrf
                                         <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control" name="search" id="search" placeholder="Procurar Contato">
+                                            <input type="text" class="form-control" name="search" id="search" required placeholder="Procurar Contato">
                                             <div class="input-group-append">
                                                     <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
                                             </div>
@@ -115,14 +115,6 @@
 
                             <div class="card-body p-0">
                                 <div class="mailbox-controls">
-                                    {{-- <div class="float-right">
-                                        @if (isset($filters))
-                                        {{ $contacts->appends($filters)->links()}}
-                                        @else
-                                        {{ $contacts->links()}}
-                                        @endif
-                                    </div> --}}
-
                                 </div>
                                 <div class="table-responsive mailbox-messages">
                                     <table class="table table-hover table-striped">
@@ -175,11 +167,6 @@
                             </div>
 
                             <div class="card-footer p-0">
-                                {{-- @if (isset($filters))
-                                {{ $contacts->appends($filters)->links()}}
-                                @else
-                                {{ $contacts->links()}}
-                                @endif --}}
                             </div>
                         </div>
 

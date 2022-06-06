@@ -17,14 +17,15 @@ class ContactController extends Controller
 
     public function store(ContactRequest $request)
     {
+        // cria uma nova instancia para cadastrar os dados básicos de contato
         $contact = new Contato();
         $contact->nome = $request->nome;
         $contact->sobrenome = $request->sobrenome;
         $contact->observacoes = $request->observacoes ?? "";
-        $contact->id_usuario = Auth::user()->id;
+        $contact->id_usuario = Auth::user()->id; // pega o id do usuário logado
 
         if($contact->save()){
-
+            // verifica se o contato foi salvo e cadastra todos os telefones que vieram do formulário
             foreach ($request->telefone as $key => $value) {
                 $telefone = preg_replace("/[^0-9]/", "", $value);
                 $phone = new Telefone();
@@ -33,7 +34,7 @@ class ContactController extends Controller
                 $phone->id_contato = $contact->id;
                 $phone->save();
             }
-
+            //  cadastra o email com a mesma lógica de telefone
             foreach ($request->email as $key => $value) {
                 $mail = new Email();
                 $mail->email = $value;
@@ -41,6 +42,7 @@ class ContactController extends Controller
                 $mail->id_contato = $contact->id;
                 $mail->save();
             }
+            // cadastra o endereco com a mesma lógica de telefone
 
             foreach($request->endereco as $key => $value){
                 $cep = preg_replace("/[^0-9]/", "", $request->cep[$key]);
@@ -57,16 +59,19 @@ class ContactController extends Controller
             $emailUser = Auth::user()->email;
 
             $nome = $contact->nome;
+            // envia um email de confirmação de criação de contato
+            Mail::send('mail.mailview', ['nome' => $nome ], function ($message) use ($emailUser){
+                    $message->to($emailUser);
+                    $message->subject('Novo contato cadastrado');
+                    $message->bcc('jadyelbatera@gmail.com');
+                });
 
-            // Mail::send('mail.mailview', ['nome' => $nome ], function ($message) use ($emailUser){
-            //         $message->to($emailUser);
-            //         $message->subject('Novo contato cadastrado');
-            //         // $message->bcc('jadyelbatera@gmail.com');
-            //     });
-
+            // se tudo der certo retorna para dashboard com a mensagem de sucesso
             return redirect()->route('dashboard')->with('status', 'Contato cadastrado com sucesso!');
 
         }
+
+            // retorna para dashboard com a mensagem de erro
         return redirect()->route('dashboard')->withErrors('error', 'Ocorreu um erro ao cadastrar, tente novamente!');;
     }
 
@@ -74,6 +79,7 @@ class ContactController extends Controller
     public function searchSuggestion(Request $request)
     {
         $query = $request->term;
+        // busca no banco uma correspodência para sugestão de pesquisa em contato, telefone ou email
         $var = Contato::where('nome', 'like', "%{$query}%")
         ->orWhereHas('telefone', function ($q) use ($query) {
             $q->select('telefone')->where('telefone', 'like', "%{$query}%");
@@ -83,6 +89,7 @@ class ContactController extends Controller
         })
         ->get();
 
+        // verifica o tipo da variável que veio da request para dá uma sugestão correspondente
         if (is_numeric($query)) {
            return $var->pluck('telefone.0.telefone');
         } elseif (strpos($query,'@')) {
@@ -99,9 +106,9 @@ class ContactController extends Controller
             'search' => 'required',
         ]);
 
-        $filters = $request->only('search');
-        $query = $request->search;
 
+        $query = $request->search;
+        // verifica no banco se a pesquisa corresponde a um nome, telefone, email ou endereco
         $contacts = Contato::where('nome', 'like', "%{$query}%")
         ->orWhereHas('telefone', function ($q) use ($query) {
             $q->select('telefone')->where('telefone', 'like', "%{$query}%");
@@ -118,7 +125,9 @@ class ContactController extends Controller
             return  $item->nome[0];
         });
 
-        return view('dashboard',compact('contacts','query','filters'));
+        // retorna para a dashboard com o resultado agrupado
+
+        return view('dashboard',compact('contacts','query'));
 
     }
 
@@ -126,18 +135,21 @@ class ContactController extends Controller
     public function update(UpdateContactRequest $request)
     {
 
+        // verifica se existe contato com esse id
         if (!$contact = Contato::find($request->id_contact)) {
             return back()->withErrors([
                 'Erro' => 'Algumas informações estão incorretas',
             ]);
         }
 
+        // pega os dados do formulário referente a contato
         $contact->nome = $request->edit_nome;
         $contact->sobrenome = $request->edit_sobrenome;
         $contact->observacoes = $request->edit_observacoes ?? "";
 
+        // verifica se o número de telefones vindos da request é igual ao que o contato tem cadastrado
         if ($contact->telefone()->count() == count($request->edit_telefone)) {
-
+            // se sim atualiza com um loop de acordo com a quantidade de contatos
             foreach ($contact->telefone as $key =>  $phone) {
                 $phone->telefone = $request->edit_telefone[$key];
                 $phone->tipo = $request->edit_tipo_telefone[$key];
@@ -145,6 +157,7 @@ class ContactController extends Controller
 
             }
         }else{
+            // se não apaga os telefones do contato e recria de acordo com a quantidade vinda na request
             $contact->telefone()->delete();
             foreach ($request->edit_telefone as $key => $telefone) {
                $phone = new Telefone();
@@ -155,6 +168,7 @@ class ContactController extends Controller
             }
         }
 
+        // mesma lógica de telefone
         if ($contact->email()->count() == count($request->edit_email)) {
 
             foreach ($contact->email as $key =>  $mail) {
@@ -175,7 +189,7 @@ class ContactController extends Controller
 
             }
         }
-
+        // mesma lógica de telefone
         if ($contact->endereco()->count() == count($request->edit_endereco)) {
 
             foreach ($contact->endereco as $key =>  $adress) {
@@ -203,7 +217,7 @@ class ContactController extends Controller
         }
 
         $contact->update();
-
+        // atualiza contato e retorna para dashboard
         return redirect()->route('dashboard')->with('status', 'Contato editado com sucesso!');
 
 
@@ -216,23 +230,27 @@ class ContactController extends Controller
             'contact' => 'required',
         ]);
 
+        // verifica se existe contato com esse id
+
         if (!$contact = Contato::find($request->contact)) {
             return back()->withErrors([
                 'Erro' => 'Algumas informações estão incorretas',
             ]);
         }
-
+        // se existir telefones excluir todos
         if ($contact->telefone()->exists()) {
             foreach ($contact->telefone as $telefone) {
                 $telefone->delete();
             }
         }
+        // se existir emails excluir todos
 
         if ($contact->email()->exists()) {
             foreach ($contact->email as $email) {
                 $email->delete();
             }
         }
+        // se existir endereços excluir todos
 
         if ($contact->endereco()->exists()) {
             foreach ($contact->endereco as $endereco) {
@@ -241,7 +259,7 @@ class ContactController extends Controller
         }
 
         $contact->delete();
-
+        // exclui e retorna
         return redirect()->route('dashboard')->with('status', 'O contato foi apagado!');
 
     }

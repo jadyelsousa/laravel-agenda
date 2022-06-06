@@ -23,8 +23,8 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     $contacts = Contato::where('id_usuario',Auth::user()->id)->orderBy('nome', 'asc')->get();
-    $contacts = $contacts->groupBy(function ($item, $key) {
-        return  $item->nome[0];
+    $contacts = $contacts->groupBy(function ($item) {
+    return  $item->nome[0];
     });
 
     return view('dashboard',compact('contacts'));

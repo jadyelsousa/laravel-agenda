@@ -201,7 +201,8 @@ function pesquisacep(valor) {
         if (this.readyState == 4) {
             if (this.status == 200) {
                 var result = JSON.parse(this.responseText);
-                if(result.erro != true){
+                console.log(result);
+                if(result.erro != "true"){
                     console.log(result);
                     inputEndereco.setAttribute("value",result.logradouro);
                     inputEstado.setAttribute("value",result.uf);
@@ -210,6 +211,10 @@ function pesquisacep(valor) {
                     $("#observacoes").focus();
                     $("#mensagem").html('');
                 }else{
+                    inputEndereco.setAttribute("value","");
+                    inputEstado.setAttribute("value","");
+                    inputBairro.setAttribute("value","");
+                    inputCidade.setAttribute("value","");
                     $("#mensagem").html('(CEP inválido!)');
                 }
             }
@@ -281,17 +286,6 @@ $(document).on('click', '.removeadress', function() {
 
 
 
-  $('.addmorephone-edit').on('click', function() {
-    var $clone = $(this).parent().parent().clone(true).last();
-    $clone.find("input")
-        .val("");
-  });
-
-  $('.removephone-edit').on('click', function() {
-    if($('div.phone-row').length !=1)
-      $('div.phone-row:last').remove();
-  });
-
 $(document).on('click', '.addmorephone-edit', function(ev) {
     var $clone = $(this).parent().parent().clone();
     $clone.find("input")
@@ -352,7 +346,7 @@ $(document).on('click', '.removeadress-edit', function() {
 
 $(document).on('click', '.deleteContact', function() {
     var id = $(this).attr('data-id');
-
+    // pega o id do contato ao clicar no botão, e adiciona ao input contactId
     $('#contactId').val(id);
 
     $('#mdlExcluir').modal('show');
