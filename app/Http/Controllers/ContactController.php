@@ -80,7 +80,7 @@ class ContactController extends Controller
     {
         $query = $request->term;
         // busca no banco uma correspodência para sugestão de pesquisa em contato, telefone ou email
-        $var = Contato::where('nome', 'like', "%{$query}%")
+-        $var = Contato::where('nome', 'like', "%{$query}%")
         ->orWhereHas('telefone', function ($q) use ($query) {
             $q->select('telefone')->where('telefone', 'like', "%{$query}%");
         })
